@@ -89,7 +89,7 @@ namespace GPS
                         LongitudeTextBox.Text = wysokosc;
 
                         NumberOfSatelitesTextBox.Text = info[6];
-                        HeightAboveSeaLevelTextBox.Text = info[8] + " m";
+                        HeightAboveSeaLevelTextBox.Text = info[9] + " m";
                         SeparationTextBox.Text = info[11] + " m";
                     }
                 }
