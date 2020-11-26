@@ -1,0 +1,15 @@
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\bin\Debug\GPSApplication.exe.config
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\bin\Debug\GPSApplication.exe
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\bin\Debug\GPSApplication.pdb
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication.csprojAssemblyReference.cache
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\MainWindow.g.cs
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\App.g.cs
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication_MarkupCompile.cache
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication_MarkupCompile.lref
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\MainWindow.baml
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication.g.resources
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication.Properties.Resources.resources
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication.csproj.GenerateResource.cache
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication.csproj.CoreCompileInputs.cache
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication.exe
+C:\Users\huawei\source\repos\GPSApplication\GPSApplication\obj\Debug\GPSApplication.pdb
