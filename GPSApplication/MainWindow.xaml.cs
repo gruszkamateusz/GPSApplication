@@ -27,9 +27,9 @@ namespace GPS
 
         int delay = 2000;
         string outputData;
-        string szerokosc;
-        string wysokosc;
-
+        string latitude; // szerokosc geograficzna
+        string longtitude; // dlugosc geograficzna
+        string time;
         public MainWindow()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
@@ -37,7 +37,7 @@ namespace GPS
             _serialPort = new SerialPort();
         }
 
-        /// Odczytanie danych z modułu GPS
+        // Odczytanie danych z modułu GPS
         private void GetData()
         {
             //przypisanie wszystkich wiadomości
@@ -59,12 +59,18 @@ namespace GPS
                         //podzielenie tekstu na kawałki pomiędzy przecinkami
                         var info = line.Split(',');
 
-                        szerokosc = info[2];
-                        wysokosc = info[4];
+                        //Czas w formacie hhmmss.ss
+                        time = info[1];
+                        //latitude geograficzna  ddmm.mmmm 
+                        latitude = info[2];
+                        //longtitude 
+                        longtitude = info[4];
 
+                        //Konwersja na double i przesunięcie kropki o 2 pozycje
+                        double timeFromMessage = double.Parse(time, CultureInfo.InvariantCulture) / 100.0;
+                        double longdec = double.Parse(longtitude, CultureInfo.InvariantCulture) / 100.0;
+                        double latdec = double.Parse(latitude, CultureInfo.InvariantCulture) / 100.0;
 
-                        double longdec = double.Parse(wysokosc, CultureInfo.InvariantCulture) / 100.0;
-                        double latdec = double.Parse(szerokosc, CultureInfo.InvariantCulture) / 100.0;
                         if (info[3] == "S")
                         {
                             fetchedLatitude = "-";
@@ -75,18 +81,26 @@ namespace GPS
                         }
                         var latSplit = Convert.ToString(latdec).Split('.');
                         var longSplit = Convert.ToString(longdec).Split('.');
+                        var timeSplit = Convert.ToString(timeFromMessage).Split('.');
+
+                        double seconds = double.Parse(timeSplit[1], CultureInfo.InvariantCulture);
+                        double hoursAndMinutes = double.Parse(timeSplit[0],CultureInfo.InvariantCulture) / 100;
+                        var hoursAndMinutesSplit = Convert.ToString(hoursAndMinutes).Split('.');
+
+                        time = hoursAndMinutesSplit[0] + ":" + hoursAndMinutesSplit[1] + ":" + seconds.ToString("F2");
 
                         longdec = Convert.ToDouble("0." + longSplit[1], CultureInfo.InvariantCulture) * 100;
                         latdec = Convert.ToDouble("0." + latSplit[1], CultureInfo.InvariantCulture) * 100;
 
                         //Szerokość geograficzna w formacie XX YY.ZZZZ
-                        szerokosc = fetchedLatitude + Convert.ToDouble(latSplit[0]).ToString() + " " + latdec.ToString();
+                        latitude = fetchedLatitude + Convert.ToDouble(latSplit[0]).ToString() + " " + latdec.ToString();
                         //Długość geograficzna w formacie XX YY.ZZZZ
-                        wysokosc = fetchedLongitude + Convert.ToDouble(longSplit[0]).ToString() + " " + longdec.ToString();
+                        longtitude = fetchedLongitude + Convert.ToDouble(longSplit[0]).ToString() + " " + longdec.ToString();
 
 
-                        LatitudeTextBox.Text = szerokosc;
-                        LongitudeTextBox.Text = wysokosc;
+                        LatitudeTextBox.Text = latitude;
+                        LongitudeTextBox.Text = longtitude;
+                        timeTextBox.Text = time;
 
                         NumberOfSatelitesTextBox.Text = info[6];
                         HeightAboveSeaLevelTextBox.Text = info[9] + " m";
@@ -98,9 +112,7 @@ namespace GPS
             }
         }
 
-        /// Połączenie z urządzeniem Bluetooth
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        // Połączenie z urządzeniem Bluetooth
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
             _serialPort.PortName = PortNameTextBox.Text;
@@ -119,25 +131,20 @@ namespace GPS
         }
 
 
-        /// Wskazanie na mapie aktualnej lokalizacji 
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        // Wskazanie na mapie aktualnej lokalizacji 
         private void ShowOnMapButton_Click(object sender, RoutedEventArgs e)
         {
             webBrowser.Navigated += new NavigatedEventHandler(WebBrowser_Navigated);
-            webBrowser.Navigate(googleMapsUrl + szerokosc + ", " + wysokosc);
+            webBrowser.Navigate(googleMapsUrl + latitude + ", " + longtitude);
         }
 
-        /// Delegat czyszczenia komunikatów
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        // Delegat czyszczenia komunikatów
         void WebBrowser_Navigated(object sender, NavigationEventArgs e)
         {
             HideJsScriptErrors((WebBrowser)sender);
         }
 
-        /// Ukrycie komunikatów JS
-        /// <param name="wb"></param>
+        // Ukrycie komunikatów JS
         public void HideJsScriptErrors(WebBrowser wb)
         {
             FieldInfo fld = typeof(WebBrowser).GetField("_axIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic);
